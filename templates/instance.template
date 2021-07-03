@@ -16,6 +16,10 @@ Parameters:
     Type: String
   TheWebPort:
     Type: Number
+Conditions:
+  AWSCN: !Equals 
+    - !Sub '${AWS::Partition}'
+    - 'aws-cn'   
 Resources:
   TheRolePolicies:
     Type: AWS::IAM::Policy
@@ -46,6 +50,9 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
+                !If 
+                - AWSCN
+                - ec2.amazonaws.cn
                 - ec2.amazonaws.com
             Action:
               - sts:AssumeRole
